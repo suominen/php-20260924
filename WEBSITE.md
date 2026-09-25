@@ -93,15 +93,17 @@ unit and the wrapper (`MODE=package`).
       created by rsync.
 - [x] Verify the site renders at `https://kimmo.cloud/php-20260924/`,
       including the RSS feed and OG metadata.
-- [ ] Front-page entry in `~/src/kimmo.cloud/index.html` under
-      "Applications", newest first.
+- [x] Front-page entry in `~/src/kimmo.cloud/index.html` under
+      "Applications", newest first — titled with the tracker's own
+      title, since it covers eleven CVEs and has no nickname.
 
-### 5. Automated maintenance — pending
+### 5. Automated maintenance — done 2026-09-25
 
-`main` must be on `origin` first: the wrapper runs `git fetch origin`
-under `set -eu`. Then, as recorded in `CLAUDE.md`: create the
-`auto-update` worktree, link the units with `ln -sr`, and enable the
-timer. It holds the `06,18:05` slot.
+`main` was pushed to `origin` first: the wrapper runs
+`git fetch origin` under `set -eu`. Then, as recorded in `CLAUDE.md`:
+the `auto-update` worktree created, the units linked with `ln -sr`,
+and the timer enabled. It holds the `06,18:05` slot; the first
+scheduled run is 2026-09-25 18:05.
 
 ## Decisions
 
