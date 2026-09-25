@@ -396,8 +396,9 @@ frozen at their final verdict.
 - Go (any recent version) — for Hugo Modules to pull PaperMod, and to
   build Hugo itself.
 - `make check` needs `python3` and `git`; `scripts/debian-versions`
-  also needs `dpkg` (for `dpkg --compare-versions`), present on any
-  Debian host.
+  also needs the host's `dpkg` (for `dpkg --compare-versions`), present
+  on any Debian host — the script sets its own `PATH`, so a dev-shell
+  copy would not be seen.
 - The Nix flake provides these for an interactive shell: `nix develop`
   (or `cd` in if direnv is set up). The timer service runs on the host
   `PATH`, though, so the auto-update host still needs the apt packages

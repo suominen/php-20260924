@@ -10,7 +10,7 @@
 
 set -eu
 
-PATH=/bin:/usr/bin:/usr/local/bin
+PATH=/bin:/usr/bin:/usr/local/bin:/usr/pkg/bin
 export PATH
 
 PROG="${0##*/}"
@@ -285,8 +285,11 @@ ${generic}"
 	    flag=-
 	fi
 
+	# Assign first: a failure inside a substitution used as a printf
+	# argument would be swallowed, printing a row with no ids.
+	ids="$(id_column "${block}" "${generic}")"
+
 	printf '%s\t%s\t%s\t%s\t%s\n' \
-	    "${channel}" "${attr}" "${version}" "${flag}" \
-	    "$(id_column "${block}" "${generic}")"
+	    "${channel}" "${attr}" "${version}" "${flag}" "${ids}"
     done
 done

@@ -10,7 +10,7 @@
 
 set -eu
 
-PATH=/bin:/usr/bin:/usr/local/bin
+PATH=/bin:/usr/bin:/usr/local/bin:/usr/pkg/bin
 export PATH
 
 PROG="${0##*/}"
@@ -84,8 +84,9 @@ makevar()
 # Print the tracked ids named in a package's patches on a branch,
 # comma-separated, or `-`.  -w keeps CVE-2026-6103 from matching
 # inside CVE-2026-61030.  git grep exits 1, quietly, when nothing
-# matches or patches/ does not exist; any other failure is an error,
-# not "no patches".
+# matches or patches/ does not exist.  It also exits 1 when it cannot
+# read a file, saying so only on stderr, so any error output counts as
+# a failure too -- never as "no patches".
 patch_ids()
 {
     local branch pkg rc found
@@ -94,15 +95,14 @@ patch_ids()
 
     rc=0
     git -C "${PKGSRC}" grep -h -o -w -F -f "${pattern_file}" \
-	"${branch}" -- "${pkg}/patches/" > "${tmp}/matches" || rc=$?
+	"${branch}" -- "${pkg}/patches/" \
+	> "${tmp}/matches" 2> "${tmp}/errors" || rc=$?
 
-    case "${rc}" in
-    0|1)
-	;;
-    *)
-	die "git grep failed on ${pkg}/patches/ at ${branch}"
-	;;
-    esac
+    if [ "${rc}" -gt 1 ] || [ -s "${tmp}/errors" ]
+    then
+	die "git grep failed on ${pkg}/patches/ at ${branch}:" \
+	    "$(sed -n 1p "${tmp}/errors")"
+    fi
 
     found="$(sort -u "${tmp}/matches" | paste -s -d , -)"
     echo "${found:--}"
@@ -240,8 +240,11 @@ do
 	    flag=-
 	fi
 
+	# Assign first: a die inside a substitution used as a printf
+	# argument would be swallowed, printing a row with no ids.
+	ids="$(patch_ids "${branch}" "${pkg}")"
+
 	printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
-	    "${branch}" "${pkg}" "${id}" "${version}" "${flag}" \
-	    "$(patch_ids "${branch}" "${pkg}")"
+	    "${branch}" "${pkg}" "${id}" "${version}" "${flag}" "${ids}"
     done
 done

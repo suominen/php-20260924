@@ -99,6 +99,13 @@ class FixtureRepo:
         """Point refs/remotes/origin/<ref> at sha."""
         self.git("update-ref", "refs/remotes/origin/" + ref, sha)
 
+    def drop_blob(self, rev, path):
+        """Delete the loose object behind rev:path, so reading that
+        file's contents fails while the tree still lists it."""
+        sha = self.git("rev-parse", "%s:%s" % (rev, path))
+        os.unlink(os.path.join(self.path, ".git", "objects", sha[:2],
+                               sha[2:]))
+
 
 class FixtureWeb:
     """A directory tree served through file:// URLs."""

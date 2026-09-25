@@ -11,7 +11,7 @@
 
 set -eu
 
-PATH=/bin:/usr/bin:/usr/local/bin
+PATH=/bin:/usr/bin:/usr/local/bin:/usr/pkg/bin
 export PATH
 
 PROG="${0##*/}"
@@ -59,7 +59,8 @@ suite -- a point release can also leave the main archive ahead. When
 both archives hold the same version the tracker lists only the plain
 suite, and so does this script. Versions come from
 the security tracker's source-package pages, which cover both
-archives; comparing them takes dpkg.
+archives; comparing them takes dpkg, which must be on the host (this
+script sets its own PATH).
 
 <php> is the upstream PHP release the package builds, read from the
 newest \`New upstream version X.Y.Z\` line of that version's
