@@ -87,10 +87,11 @@ unit and the wrapper (`MODE=package`).
 - [x] `.envrc` for direnv auto-activation (`direnv allow` once).
 - [x] `README.md` documents the workflow.
 
-### 4. Publish — pending review
+### 4. Publish — done 2026-09-25
 
-- [ ] First `make dist` to push to `haig`.
-- [ ] Verify the site renders at `https://kimmo.cloud/php-20260924/`,
+- [x] First `make dist` to push to `haig` — `htdocs/php-20260924/`
+      created by rsync.
+- [x] Verify the site renders at `https://kimmo.cloud/php-20260924/`,
       including the RSS feed and OG metadata.
 - [ ] Front-page entry in `~/src/kimmo.cloud/index.html` under
       "Applications", newest first.
