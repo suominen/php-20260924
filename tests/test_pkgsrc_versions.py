@@ -235,6 +235,21 @@ class PkgsrcVersionsTest(TempDirTest):
         out = rows(self.lookup().stdout)
         self.assertEqual(out[0][2], "php84-8.4.26nb3")
 
+    def test_unreadable_patch_fails(self):
+        # git grep reports an unreadable file only on stderr, with the
+        # same exit status as "no match": it must still fail the run
+        # rather than print a row with no ids.
+        files = tree(ALL)
+        files["lang/php84/patches/patch-a"] = "$NetBSD$\n\nunique body\n"
+        sha = self.repo.commit(files)
+        self.repo.publish("trunk", sha)
+        self.repo.publish("pkgsrc-2026Q3", sha)
+        self.repo.drop_blob("origin/trunk", "lang/php84/patches/patch-a")
+        result = self.lookup()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("git grep failed", result.stderr)
+        self.assertEqual(result.stdout, "")
+
     def test_not_a_clone_fails(self):
         result = run([SCRIPT, "-r", os.path.join(self.tmp, "nope")])
         self.assertNotEqual(result.returncode, 0)

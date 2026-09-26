@@ -48,10 +48,6 @@
             gnused
             gawk
 
-            # scripts/debian-versions compares a suite's main-archive and
-            # security-archive versions with `dpkg --compare-versions`.
-            dpkg
-
             # Unpack a kernel RPM by hand (`bsdtar -xOf kernel-*.rpm`),
             # zstd payloads included; no rpm2cpio + cpio needed.
             libarchive
