@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-09-25
+lastmod: 2026-09-26
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -19,7 +19,7 @@ cover:
 | Highest severity | [CVE-2026-91765][ghsa-rgrp] — **7.5 high** (CVSS 3.1): unauthenticated remote crash of any `SoapServer` endpoint |
 | Types | Stack exhaustion, heap buffer overflows and over-reads, an access-control bypass, TLS hostname verification flaws, a credential leak, archive entry injection |
 | Differs by branch | [GHSA-ch8v-r6jh-4vvr][ghsa-ch8v] is fixed in 8.2.34 and 8.3.35 only — 8.4 and 8.5 already fixed it in 8.4.25 and 8.5.10. [CVE-2026-17545][ghsa-9f67] affects PHP on Windows only |
-| CVE records | Reserved, not yet published in the CVE List — the PHP project's GitHub advisories are the published source |
+| CVE records | Published in the CVE List, assigned by the PHP project's own CNA — scores mostly match the GitHub advisories; three (CVE-2025-1218, CVE-2026-93682, CVE-2026-6103) carry a higher CVSS score on a Scope: Changed vector, see the [verification log](#verification-log) |
 | KEV listed | no |
 | Public exploit | none known — the advisories carry proof-of-concept inputs, but no exploit has been published |
 {.summary}
@@ -117,7 +117,7 @@ DLA fix lands first.
 |---|---|---|---|---|---|
 | Debian | sid | `8.4.24` | `php8.4` `8.4.24-1` | — | :x: Vulnerable — needs 8.4.26 |
 | Debian | forky (testing) | `8.4.24` | `php8.4` `8.4.24-1` | — | :x: Vulnerable — needs 8.4.26 |
-| Debian | 13 (trixie) | `8.4.24` | `php8.4` `8.4.24-1~deb13u1` | — | :x: Vulnerable — needs 8.4.26 |
+| Debian | 13 (trixie) | `8.4.26` | `php8.4` `8.4.26-1~deb13u1` | 2026-09-25 | :white_check_mark: Fixed |
 | Debian | 12 (bookworm) | `8.2.33` | `php8.2` `8.2.33-1~deb12u1` | — | :x: Vulnerable — needs 8.2.34; LTS |
 | pkgsrc | `pkgsrc-current` | `8.4.26` | `php84-8.4.26` (default) | 2026-09-24 | :white_check_mark: Fixed |
 | pkgsrc | `pkgsrc-current` | `8.5.11` | `php85-8.5.11` | 2026-09-24 | :white_check_mark: Fixed |
@@ -171,8 +171,10 @@ was only ever in experimental.
 Debian's PHP maintainer normally imports each upstream point release,
 security uploads to the stable suites included, so the upstream part
 of the version (everything before the last `-`) is the PHP release
-it builds. The [Debian security tracker][debian-91765] has a page per CVE;
-on all of the applicable ones every suite is still open, and it marks
+it builds. The [Debian security tracker][debian-91765] has a page per
+CVE; trixie closed all ten applicable CVEs via [DSA-6514-1][dsa-6514],
+which shipped 8.4.26 into `trixie-security`, while sid, forky, and
+bookworm are still open on every applicable CVE. The tracker marks
 CVE-2026-17545 not affected ("Only affects PHP on Windows").
 GHSA-ch8v-r6jh-4vvr has no CVE and so no tracker page; it reaches a
 suite with the upstream release or a changelog entry naming it.
@@ -334,7 +336,17 @@ reproduced. Most readers never need it.
   - Severities and CVSS scores as quoted in the Advisories table:
     CVSS 3.1 for eleven, CVSS 4.0 only for CVE-2026-17545.
 - **CVE records** (via the CVE Services API, `cveawg.mitre.org`):
-  - None of the eleven CVE IDs has a published record yet.
+  - All eleven CVE IDs now have a `PUBLISHED` record, assigned by
+    `assignerShortName: php` (the PHP project's own CNA).
+  - Eight of the eleven carry the same CVSS 3.1 vector and score as
+    the matching GitHub advisory.
+  - Three score higher than their GitHub advisory on a `Scope:
+    Changed` (`S:C`) vector rather than the advisory's `S:U`:
+    CVE-2025-1218 (3.1 → 3.4), CVE-2026-93682 (5.3 → 5.8), and
+    CVE-2026-6103 (4.0 → 4.3). The GitHub advisory's version and
+    severity stay the tracker's source per its own convention; this
+    is recorded here as the discrepancy, not acted on.
+  - CVE-2026-17545's CVSS 4.0 score (6.9) matches its GitHub advisory.
 - **KEV**: none of the eleven CVE IDs is in CISA's catalog.
 
 #### Distributions
@@ -351,10 +363,14 @@ reproduced. Most readers never need it.
   - No tracked advisory id in any changelog entry above that line.
   - bookworm's version comes from `bookworm-security`, an LTS team
     upload.
+  - trixie's fixed version comes from `trixie-security`: `php8.4`
+    `8.4.26-1~deb13u1`, first seen 2026-09-25 on
+    snapshot.debian.org.
 - **Debian security tracker** (per-CVE pages):
   - All ten applicable CVEs open for `php8.2` in bookworm.
-  - All ten applicable CVEs open for `php8.4` in trixie, forky, and
-    sid.
+  - All ten applicable CVEs closed for `php8.4` in trixie via
+    [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`); still open for
+    `php8.4` in forky and sid.
   - CVE-2026-17545 `not-affected` ("Only affects PHP on Windows").
 - **pkgsrc** (via `scripts/pkgsrc-versions` against the local clone):
   - Versions from `lang/php/phpversion.mk`; `PHP_VERSION_DEFAULT` 84
@@ -397,6 +413,7 @@ reproduced. Most readers never need it.
 | [GHSA-ch8v-r6jh-4vvr][ghsa-ch8v] | <https://github.com/php/php-src/security/advisories/GHSA-ch8v-r6jh-4vvr> |
 | [GHSA-9f67-6fw4-hpfp — CVE-2026-17545][ghsa-9f67] | <https://github.com/php/php-src/security/advisories/GHSA-9f67-6fw4-hpfp> |
 | [Debian security tracker — CVE-2026-91765][debian-91765] | <https://security-tracker.debian.org/tracker/CVE-2026-91765> |
+| [DSA-6514-1][dsa-6514] | <https://security-tracker.debian.org/tracker/DSA-6514-1> |
 | [Debian security tracker — `php8.4`][debian-php84] | <https://security-tracker.debian.org/tracker/source-package/php8.4> |
 | [Debian security tracker — `php8.2`][debian-php82] | <https://security-tracker.debian.org/tracker/source-package/php8.2> |
 | [pkgsrc — `lang/php/phpversion.mk` (GitHub mirror)][pkgsrc-phpversion] | <https://github.com/NetBSD/pkgsrc/blob/trunk/lang/php/phpversion.mk> |
@@ -423,6 +440,7 @@ reproduced. Most readers never need it.
 [ghsa-ch8v]:          https://github.com/php/php-src/security/advisories/GHSA-ch8v-r6jh-4vvr
 [ghsa-9f67]:          https://github.com/php/php-src/security/advisories/GHSA-9f67-6fw4-hpfp
 [debian-91765]:       https://security-tracker.debian.org/tracker/CVE-2026-91765
+[dsa-6514]:           https://security-tracker.debian.org/tracker/DSA-6514-1
 [debian-php84]:       https://security-tracker.debian.org/tracker/source-package/php8.4
 [debian-php82]:       https://security-tracker.debian.org/tracker/source-package/php8.2
 [pkgsrc-phpversion]:  https://github.com/NetBSD/pkgsrc/blob/trunk/lang/php/phpversion.mk
