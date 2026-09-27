@@ -45,8 +45,9 @@ there can be written but not read back. The wrapper's `git clean -fd`
 sweeps forgotten scratch on the next run, but the only thing you should
 leave behind is the edited tracker (and its commit).
 
-1. Read CLAUDE.md to learn the project conventions, then read
-   site/content/_index.md (the canonical tracker).
+1. Read CLAUDE.md to learn the project conventions (including the
+   per-distro prose shape rule), then read site/content/_index.md (the
+   canonical tracker).
 
 2. Re-verify each row currently marked vulnerable (:x:), partial
    (:warning:), or unverified (:grey_question:). Distros explicitly out
