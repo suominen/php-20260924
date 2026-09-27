@@ -142,7 +142,10 @@ follow `~/src/cve-tracker-template/LIFECYCLE.md` § "Retiring a tracker".
   clause to a neighbouring sub-bullet. Name each pairing explicitly
   rather than relying on the order of an `A / B` list.
   `scripts/check-shape` (run by `make check`) enforces these limits and
-  the eight-line limit on per-distro paragraphs and bullets.
+  the eight-line limit on per-distro paragraphs and bullets. The
+  auto-update wrapper runs it too, on every run in which the worktree's
+  page differs from `origin/main`, and fails the unit when the page is
+  over budget.
 - **One command per fenced code block, no inline comments.** Each `sh`
   fence holds a single command with nothing after it on the line, so
   PaperMod's copy button yields something runnable. Clarifying notes go
