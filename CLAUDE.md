@@ -89,7 +89,8 @@ follow `~/src/cve-tracker-template/LIFECYCLE.md` § "Retiring a tracker".
 │   ├── pkgsrc-versions                          # pkgsrc: lang/php82..85 identifiers per branch
 │   ├── tracked-ids                              # the advisory/CVE ids the helpers search for
 │   ├── nixos-first-shipped                      # dates a channel's flip (see below)
-│   └── alas-cve                                 # kernel-tracker helper; unused here, carried from the template
+│   ├── alas-cve                                 # kernel-tracker helper; unused here, carried from the template
+│   └── check-shape                              # prose and log size check (`make check`)
 ├── tests/                                       # helper tests (`make check`)
 ├── systemd/                                     # user-level timer + service units
 │   ├── php-20260924-tracker-update.service      # runs scripts/auto-update
@@ -133,6 +134,15 @@ follow `~/src/cve-tracker-template/LIFECYCLE.md` § "Retiring a tracker".
   verification log. **When a row flips, rewrite the section to describe
   the current state** — never append "now fixed" / "has now" sentences to
   the old text. The section should read as if written fresh today.
+- **Verification log: one fact per sub-bullet.** Log entries are one
+  top-level bullet per source, with a terse bold lead naming the source
+  or method — at most four lines, no facts — followed by one fact per
+  nested sub-bullet of at most six lines. When a run learns something
+  new, add or edit a sub-bullet; never extend the lead or append a
+  clause to a neighbouring sub-bullet. Name each pairing explicitly
+  rather than relying on the order of an `A / B` list.
+  `scripts/check-shape` (run by `make check`) enforces these limits and
+  the eight-line limit on per-distro paragraphs and bullets.
 - **One command per fenced code block, no inline comments.** Each `sh`
   fence holds a single command with nothing after it on the line, so
   PaperMod's copy button yields something runnable. Clarifying notes go

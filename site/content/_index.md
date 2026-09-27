@@ -171,7 +171,9 @@ was only ever in experimental.
 Debian's PHP maintainer normally imports each upstream point release,
 security uploads to the stable suites included, so the upstream part
 of the version (everything before the last `-`) is the PHP release
-it builds. The [Debian security tracker][debian-91765] has a page per
+it builds.
+
+The [Debian security tracker][debian-91765] has a page per
 CVE; trixie closed all ten applicable CVEs via [DSA-6514-1][dsa-6514],
 which shipped 8.4.26 into `trixie-security`, while sid, forky, and
 bookworm are still open on every applicable CVE. The tracker marks
