@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-09-27
+lastmod: 2026-09-28
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -151,10 +151,10 @@ DLA fix lands first.
 | nixpkgs | `release-26.05` branch | `8.5.11` | `php85` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `release-26.05` branch | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `release-26.05` branch | `8.2.34` | `php82` | 2026-09-27 | :white_check_mark: Fixed |
-| nixpkgs | `nixpkgs-unstable` | `8.4.25` | `php84` (default) | — | :x: Vulnerable — needs 8.4.26 |
-| nixpkgs | `nixpkgs-unstable` | `8.5.10` | `php85` | — | :x: Vulnerable — needs 8.5.11 |
-| nixpkgs | `nixpkgs-unstable` | `8.3.33` | `php83` | — | :x: Vulnerable — needs 8.3.35 |
-| nixpkgs | `nixpkgs-unstable` | `8.2.33` | `php82` | — | :x: Vulnerable — needs 8.2.34 |
+| nixpkgs | `nixpkgs-unstable` | `8.4.26` | `php84` (default) | 2026-09-27 | :white_check_mark: Fixed |
+| nixpkgs | `nixpkgs-unstable` | `8.5.11` | `php85` | 2026-09-27 | :white_check_mark: Fixed |
+| nixpkgs | `nixpkgs-unstable` | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
+| nixpkgs | `nixpkgs-unstable` | `8.2.34` | `php82` | 2026-09-27 | :white_check_mark: Fixed |
 {.distros}
 
 ### Debian
@@ -396,6 +396,9 @@ reproduced. Most readers never need it.
     `nixos-26.05.10742.a71ca2a7b9c4` respectively, both published
     2026-09-27 (via `scripts/nixos-first-shipped`); `nixos-unstable`
     and `nixos-26.05` (non-`-small`) still pin the pre-fix versions.
+  - `nixpkgs-unstable` carries all four fixed releases as of
+    `nixpkgs-26.11pre1080404.3181085bfd08`, published 2026-09-27 (via
+    `scripts/nixos-first-shipped`).
 - **NixOS security tracker** ([tracker.security.nixos.org][nixos-sec])
   — a JS-rendered application, linked for readers.
 {{< /details >}}
