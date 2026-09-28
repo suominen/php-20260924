@@ -127,18 +127,18 @@ DLA fix lands first.
 | pkgsrc | `pkgsrc-2026Q3` | `8.5.10` | `php85-8.5.10nb1` | — | :x: Vulnerable — needs 8.5.11 |
 | pkgsrc | `pkgsrc-2026Q3` | `8.3.33` | `php83-8.3.33nb1` | — | :x: Vulnerable — needs 8.3.35 |
 | pkgsrc | `pkgsrc-2026Q3` | `8.2.33` | `php82-8.2.33nb1` | — | :x: Vulnerable — needs 8.2.34 |
-| NixOS | `nixos-unstable` | `8.4.25` | `php84` (default) | — | :x: Vulnerable — needs 8.4.26 |
-| NixOS | `nixos-unstable` | `8.5.10` | `php85` | — | :x: Vulnerable — needs 8.5.11 |
-| NixOS | `nixos-unstable` | `8.3.33` | `php83` | — | :x: Vulnerable — needs 8.3.35 |
-| NixOS | `nixos-unstable` | `8.2.33` | `php82` | — | :x: Vulnerable — needs 8.2.34 |
+| NixOS | `nixos-unstable` | `8.4.26` | `php84` (default) | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-unstable` | `8.5.11` | `php85` | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-unstable` | `8.3.35` | `php83` | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-unstable` | `8.2.34` | `php82` | 2026-09-28 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable-small` | `8.4.26` | `php84` (default) | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable-small` | `8.5.11` | `php85` | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable-small` | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable-small` | `8.2.34` | `php82` | 2026-09-27 | :white_check_mark: Fixed |
-| NixOS | `nixos-26.05` | `8.4.25` | `php84` (default) | — | :x: Vulnerable — needs 8.4.26 |
-| NixOS | `nixos-26.05` | `8.5.10` | `php85` | — | :x: Vulnerable — needs 8.5.11 |
-| NixOS | `nixos-26.05` | `8.3.33` | `php83` | — | :x: Vulnerable — needs 8.3.35 |
-| NixOS | `nixos-26.05` | `8.2.33` | `php82` | — | :x: Vulnerable — needs 8.2.34 |
+| NixOS | `nixos-26.05` | `8.4.26` | `php84` (default) | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-26.05` | `8.5.11` | `php85` | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-26.05` | `8.3.35` | `php83` | 2026-09-28 | :white_check_mark: Fixed |
+| NixOS | `nixos-26.05` | `8.2.34` | `php82` | 2026-09-28 | :white_check_mark: Fixed |
 | NixOS | `nixos-26.05-small` | `8.4.26` | `php84` (default) | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-26.05-small` | `8.5.11` | `php85` | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-26.05-small` | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
@@ -394,8 +394,12 @@ reproduced. Most readers never need it.
   - `nixos-unstable-small` and `nixos-26.05-small` carry all four
     fixed releases as of `nixos-26.11pre1080371.545c226a9af7` and
     `nixos-26.05.10742.a71ca2a7b9c4` respectively, both published
-    2026-09-27 (via `scripts/nixos-first-shipped`); `nixos-unstable`
-    and `nixos-26.05` (non-`-small`) still pin the pre-fix versions.
+    2026-09-27 (via `scripts/nixos-first-shipped`).
+  - `nixos-unstable` and `nixos-26.05` (non-`-small`) caught up a day
+    later, carrying all four fixed releases as of
+    `nixos-26.11pre1080855.7a0f122f5090` and
+    `nixos-26.05.10769.cf5e76507c6e` respectively, both published
+    2026-09-28 (via `scripts/nixos-first-shipped`).
   - `nixpkgs-unstable` carries all four fixed releases as of
     `nixpkgs-26.11pre1080404.3181085bfd08`, published 2026-09-27 (via
     `scripts/nixos-first-shipped`).
