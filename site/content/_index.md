@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-09-28
+lastmod: 2026-09-29
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -115,7 +115,7 @@ DLA fix lands first.
 
 | Distribution | Release | PHP | Package | Fixed since | Status |
 |---|---|---|---|---|---|
-| Debian | sid | `8.4.24` | `php8.4` `8.4.24-1` | — | :x: Vulnerable — needs 8.4.26 |
+| Debian | sid | `8.4.26` | `php8.4` `8.4.26-1` | 2026-09-29 | :white_check_mark: Fixed |
 | Debian | forky (testing) | `8.4.24` | `php8.4` `8.4.24-1` | — | :x: Vulnerable — needs 8.4.26 |
 | Debian | 13 (trixie) | `8.4.26` | `php8.4` `8.4.26-1~deb13u1` | 2026-09-25 | :white_check_mark: Fixed |
 | Debian | 12 (bookworm) | `8.2.33` | `php8.2` `8.2.33-1~deb12u1` | — | :x: Vulnerable — needs 8.2.34; LTS |
@@ -175,8 +175,9 @@ it builds.
 
 The [Debian security tracker][debian-91765] has a page per
 CVE; trixie closed all ten applicable CVEs via [DSA-6514-1][dsa-6514],
-which shipped 8.4.26 into `trixie-security`, while sid, forky, and
-bookworm are still open on every applicable CVE. The tracker marks
+which shipped 8.4.26 into `trixie-security`, and sid closed them the
+same way with a direct 8.4.26 upload to unstable. forky and bookworm
+are still open on every applicable CVE. The tracker marks
 CVE-2026-17545 not affected ("Only affects PHP on Windows").
 GHSA-ch8v-r6jh-4vvr has no CVE and so no tracker page; it reaches a
 suite with the upstream release or a changelog entry naming it.
@@ -368,11 +369,13 @@ reproduced. Most readers never need it.
   - trixie's fixed version comes from `trixie-security`: `php8.4`
     `8.4.26-1~deb13u1`, first seen 2026-09-25 on
     snapshot.debian.org.
+  - sid's fixed version is `php8.4` `8.4.26-1`, first seen
+    2026-09-29 on snapshot.debian.org.
 - **Debian security tracker** (per-CVE pages):
   - All ten applicable CVEs open for `php8.2` in bookworm.
   - All ten applicable CVEs closed for `php8.4` in trixie via
-    [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`); still open for
-    `php8.4` in forky and sid.
+    [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`) and in sid
+    (`8.4.26-1`); still open for `php8.4` in forky.
   - CVE-2026-17545 `not-affected` ("Only affects PHP on Windows").
 - **pkgsrc** (via `scripts/pkgsrc-versions` against the local clone):
   - Versions from `lang/php/phpversion.mk`; `PHP_VERSION_DEFAULT` 84
