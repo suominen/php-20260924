@@ -422,6 +422,9 @@ frozen at their final verdict.
   also needs the host's `dpkg` (for `dpkg --compare-versions`), present
   on any Debian host — the script sets its own `PATH`, so a dev-shell
   copy would not be seen.
+- `xz` (Debian package `xz-utils`) on the auto-update host — decompresses
+  snapshot.debian.org's past `dists/testing` indexes when dating a
+  forky fix.
 - The Nix flake provides these for an interactive shell: `nix develop`
   (or `cd` in if direnv is set up). The timer service runs on the host
   `PATH`, though, so the auto-update host still needs the apt packages
@@ -603,18 +606,27 @@ curl -fsSL 'https://snapshot.debian.org/mr/package/php8.4/<version>/srcfiles?fil
 Both of those date the upload to unstable, which is **not** forky's
 date: the build reaches testing only after the age delay and
 autopkgtests, often a week or more later. Never copy sid's date to
-forky. forky's date is the testing migration, from the `php8.4
-<version> MIGRATED to testing` entry on the package news page (it is
-posted about a day after the migration):
+forky. forky's date is the UTC day the fixed version entered testing.
+The `php8.4 <version> MIGRATED to testing` entry on the package news page
+narrows it down, but the entry can be dated a day late:
 
 ```
 curl -fsSL 'https://tracker.debian.org/pkg/php8.4/news/'
 ```
 
-If the entry is not there yet, record the date the run first saw forky
-at the fixed version and say so in the verification log; correct it
-once the entry appears. A stable suite's date is its DSA/DLA, or the
-point release that carried the fix.
+Confirm the day on snapshot.debian.org, which keeps every past state of
+testing. Read testing's version at a UTC timestamp `<ts>` (e.g.
+`20261005T120000Z`), and bisect until the change falls within one UTC
+day:
+
+```
+curl -fsSL 'https://snapshot.debian.org/archive/debian/<ts>/dists/testing/main/source/Sources.xz' | xz -dc | grep -A1500 -x 'Package: php8.4' | grep -m1 '^Version:'
+```
+
+If snapshot does not show the migration yet, record the date the run
+first saw forky at the fixed version and say so in the verification
+log. A stable suite's date is its DSA/DLA, or the point release that
+carried the fix.
 
 sid is the canary; forky inherits via the usual sid → testing
 migration; trixie advances via DSAs, bookworm via DLAs.
