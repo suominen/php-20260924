@@ -328,7 +328,7 @@ date the agent noticed, and not the date of the run.
 
 | Ecosystem | Derive from |
 |---|---|
-| Debian | the changelog entry of the fixing upload, or the fixed version's `first_seen` in <https://snapshot.debian.org/> |
+| Debian | sid: the changelog entry of the fixing upload, or the fixed version's `first_seen` in <https://snapshot.debian.org/>; forky: the testing-migration date (see the Debian recipe); stable: the DSA/DLA or point-release date |
 | pkgsrc | the commit date of the `lang/phpXY: update to …` commit (or backport patch) on that branch — see the pkgsrc recipe |
 | NixOS / nixpkgs | `scripts/nixos-first-shipped` for channels; the bump commit's date for the `master` / `release-26.05` branch rows |
 
@@ -591,13 +591,30 @@ GHSA-ch8v-r6jh-4vvr (8.2 rows only) has no CVE and no tracker page; for
 it the changelog is the only source. Some but not all is
 `:warning: Partial`.
 
-Each Debian row's *Fixed since* is the upload date of the version that
-closes the last of them, from the changelog trailer or the fixed
-version's `first_seen`:
+Each Debian row's *Fixed since* is the date that **suite** first
+carried the version that closes the last of them. For sid that is the
+upload date, from the changelog trailer or the fixed version's
+`first_seen`:
 
 ```
 curl -fsSL 'https://snapshot.debian.org/mr/package/php8.4/<version>/srcfiles?fileinfo=1'
 ```
+
+Both of those date the upload to unstable, which is **not** forky's
+date: the build reaches testing only after the age delay and
+autopkgtests, often a week or more later. Never copy sid's date to
+forky. forky's date is the testing migration, from the `php8.4
+<version> MIGRATED to testing` entry on the package news page (it is
+posted about a day after the migration):
+
+```
+curl -fsSL 'https://tracker.debian.org/pkg/php8.4/news/'
+```
+
+If the entry is not there yet, record the date the run first saw forky
+at the fixed version and say so in the verification log; correct it
+once the entry appears. A stable suite's date is its DSA/DLA, or the
+point release that carried the fix.
 
 sid is the canary; forky inherits via the usual sid → testing
 migration; trixie advances via DSAs, bookworm via DLAs.
