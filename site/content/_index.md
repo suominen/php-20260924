@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-10-05
+lastmod: 2026-10-07
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -176,11 +176,15 @@ it builds.
 The [Debian security tracker][debian-91765] has a page per CVE; trixie
 and sid closed all ten applicable CVEs via [DSA-6514-1][dsa-6514] and
 a direct 8.4.26 upload, and bookworm closed them via
-[DLA-4819-1][dla-4819] (8.2.34). forky is still open on every
-applicable CVE. The tracker marks CVE-2026-17545 not affected ("Only
+[DLA-4819-1][dla-4819] (8.2.34). The tracker marks CVE-2026-17545 not affected ("Only
 affects PHP on Windows"). GHSA-ch8v-r6jh-4vvr has no CVE and so no
 tracker page; it reaches a suite with the upstream release or a
 changelog entry naming it.
+
+forky gets the fix when sid's upload migrates to testing, and that
+migration is blocked: on riscv64 the new PHP fails the autopkgtest of
+another package, `php-arthurhoaro-web-thumbnailer`, which Debian counts
+as a regression. PHP's own tests pass on every architecture.
 
 Bookworm is in its LTS period, so its PHP updates come as DLAs from
 the LTS team, into `bookworm-security`; that archive can run ahead of
@@ -378,6 +382,13 @@ reproduced. Most readers never need it.
     trixie via [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`), and in sid
     (`8.4.26-1`); still open for `php8.4` in forky.
   - CVE-2026-17545 `not-affected` ("Only affects PHP on Windows").
+- **Debian testing migration** (the migration excuses on
+  tracker.debian.org, and testing's `Sources` on snapshot.debian.org):
+  - `php8.4` `8.4.26-1` is blocked from testing as a regression: the
+    autopkgtest of `php-arthurhoaro-web-thumbnailer/2.1.0+dfsg-5` fails
+    on riscv64.
+  - `php8.4` `8.4.26-1`'s own autopkgtests pass on all seven release
+    architectures.
 - **pkgsrc** (via `scripts/pkgsrc-versions` against the local clone):
   - Versions from `lang/php/phpversion.mk`; `PHP_VERSION_DEFAULT` 84
     on both branches.
