@@ -2,7 +2,8 @@ You are running headless from cron to refresh the PHP 2026-09-24
 security-release patch tracker. The wrapper has already fetched origin
 and checked out the auto-update branch with origin/main merged forward,
 and has also refreshed the local nixpkgs and pkgsrc clones under
-~/src/nixos/nixpkgs and ~/src/netbsd/pkgsrc — inspect them via the
+~/src/nixos/nixpkgs and ~/src/netbsd/pkgsrc, unless another tracker
+fetched them within the last two hours — inspect them via the
 `origin/...` remote-tracking refs without re-fetching.
 
 On 2026-09-24 PHP released 8.5.11, 8.4.26, 8.3.35, and 8.2.34, one per
@@ -109,6 +110,15 @@ leave behind is the edited tracker (and its commit).
       expression (`generic:` ones come from shared code and may be
       gated to other branches — read the expression before trusting
       them).
+
+      A channel whose revision the clone lacks yet prints `unresolved`
+      rows, and the script exits 3; the other channels' rows are still
+      good. Record nothing for that channel this run — it is not
+      `absent`, and it never changes a verdict — and say so in the
+      commit message (or exit without a commit if nothing else
+      changed). Any other non-zero exit is a failure: its output may
+      be cut short, so record nothing for NixOS or nixpkgs this run
+      and say why the same way.
 
       A branch row's (master, release-26.05) "Fixed since" is the
       COMMIT DATE of the version bump:

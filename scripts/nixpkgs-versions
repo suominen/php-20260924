@@ -67,6 +67,15 @@ any defined one whose version cannot be read or does not belong to
 its branch, is an error. A clone not fetched in the last 24 hours
 draws a warning, since its branch rows may be stale.
 
+A channel whose pointer names a commit the clone does not have yet
+prints every attribute the same way, but with \`unresolved\` in the
+last field and in plain attribute order, since neither the versions
+nor the default can be read. The other channels still print, and the
+script then exits 3 rather than 0: the channel moved past the clone's
+last fetch, so fetch it and rerun. It does not mean an attribute left
+the channel. A pointer that is not a commit id at all is an error.
+Errors exit 1, even after some rows have printed.
+
 Channel revisions are read from the channel's git-revision pointer and
 resolved in the local clone, which is never fetched here; refresh it
 yourself, or let the auto-update wrapper do it.
@@ -190,6 +199,8 @@ pattern_file="${tmp}/ids"
 grep -v -e '^#' -e '^[ 	]*$' "${IDS}" > "${pattern_file}" ||
 die "No ids in ${IDS}"
 
+status=0
+
 for channel in ${CHANNELS}
 do
     case "${channel}" in
@@ -207,12 +218,35 @@ do
 	rev="$(curl -fsSL ${CURL_OPTS} \
 	    "${CHANNEL_URL}/${channel}/git-revision")" ||
 	die "Cannot read the channel pointer for ${channel}"
+	# Only a full commit id may count as unresolved below: an error
+	# page served with a 200, or a ref name that happens to resolve
+	# in the clone, must not pass for a channel revision.
+	case "${rev}" in
+	*[!0-9a-f]*|'')
+	    die "The channel pointer for ${channel} is not a commit id"
+	    ;;
+	esac
+	if [ "${#rev}" -ne 40 ]
+	then
+	    die "The channel pointer for ${channel} is not a commit id"
+	fi
 	;;
     esac
 
-    git -C "${NIXPKGS}" cat-file -e "${rev}^{commit}" 2> /dev/null ||
-    die "Revision ${rev} of ${channel} is not in ${NIXPKGS};" \
-	'fetch the clone and retry'
+    # A channel pointer can move past the clone's last fetch -- the
+    # wrapper skips the fetch when another tracker made one recently.
+    # Report it and carry on, so the other channels still print.
+    if ! git -C "${NIXPKGS}" cat-file -e "${rev}^{commit}" 2> /dev/null
+    then
+	warn "Revision ${rev} of ${channel} is not in ${NIXPKGS};" \
+	    'fetch the clone and retry'
+	for attr in ${ATTRS}
+	do
+	    printf '%s\t%s\t-\t-\tunresolved\n' "${channel}" "${attr}"
+	done
+	status=3
+	continue
+    fi
 
     versions="$(git -C "${NIXPKGS}" show \
 	"${rev}:${PHP_DIR}/default.nix" 2> /dev/null)" ||
@@ -293,3 +327,5 @@ ${generic}"
 	    "${channel}" "${attr}" "${version}" "${flag}" "${ids}"
     done
 done
+
+exit "${status}"

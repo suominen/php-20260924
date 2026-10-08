@@ -225,23 +225,90 @@ class NixpkgsVersionsTest(TempDirTest):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("default.nix", result.stderr)
 
-    def test_unknown_revision_fails(self):
+    def test_unknown_revision_is_unresolved(self):
         self.repo.publish("master", self.repo.commit(tree(NEW)))
         self.channel("nixos-unstable", "0" * 40)
         result = self.lookup("nixos-unstable")
-        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.returncode, 3)
+        self.assertIn(" of nixos-unstable ", result.stderr)
         self.assertIn("fetch the clone", result.stderr)
+        self.assertEqual(rows(result.stdout), [
+            ("nixos-unstable", "php85", "-", "-", "unresolved"),
+            ("nixos-unstable", "php84", "-", "-", "unresolved"),
+            ("nixos-unstable", "php83", "-", "-", "unresolved"),
+            ("nixos-unstable", "php82", "-", "-", "unresolved"),
+        ])
+
+    def test_unknown_revision_does_not_stop_later_channels(self):
+        new = self.repo.commit(tree(NEW))
+        self.repo.publish("master", new)
+        self.channel("nixos-unstable", new)
+        self.channel("nixos-unstable-small", "0" * 40)
+        result = self.lookup("nixos-unstable", "nixos-unstable-small",
+                             "branch:master")
+        self.assertEqual(result.returncode, 3)
+        self.assertEqual(rows(result.stdout), [
+            ("nixos-unstable", "php84", "8.4.26", "default", "-"),
+            ("nixos-unstable", "php85", "8.5.11", "-", "-"),
+            ("nixos-unstable", "php83", "8.3.35", "-", "-"),
+            ("nixos-unstable", "php82", "8.2.34", "-", "-"),
+            ("nixos-unstable-small", "php85", "-", "-", "unresolved"),
+            ("nixos-unstable-small", "php84", "-", "-", "unresolved"),
+            ("nixos-unstable-small", "php83", "-", "-", "unresolved"),
+            ("nixos-unstable-small", "php82", "-", "-", "unresolved"),
+            ("branch:master", "php84", "8.4.26", "default", "-"),
+            ("branch:master", "php85", "8.5.11", "-", "-"),
+            ("branch:master", "php83", "8.3.35", "-", "-"),
+            ("branch:master", "php82", "8.2.34", "-", "-"),
+        ])
+        warnings = [l for l in result.stderr.splitlines()
+                    if "fetch the clone" in l]
+        self.assertEqual(len(warnings), 1, result.stderr)
+        self.assertIn(" of nixos-unstable-small ", warnings[0])
+
+    def test_resolved_channels_exit_zero(self):
+        new = self.repo.commit(tree(NEW))
+        self.repo.publish("master", new)
+        self.channel("nixos-unstable", new)
+        result = self.lookup("nixos-unstable", "branch:master")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("unresolved", result.stdout)
+
+    def test_pointer_that_is_not_a_commit_id_fails(self):
+        self.repo.publish("master", self.repo.commit(tree(NEW)))
+        # HEAD resolves in the clone; an error page or an empty body
+        # must not pass for an unresolved revision either.
+        for body in ("HEAD", "<html>Not Found</html>", "", "0" * 39,
+                     "A" * 40):
+            with self.subTest(body=body):
+                self.channel("nixos-unstable", body)
+                result = self.lookup("nixos-unstable")
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("not a commit id", result.stderr)
+                self.assertEqual(result.stdout, "")
 
     def test_unreadable_channel_pointer_fails(self):
         result = self.lookup("nixos-99.99")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("nixos-99.99", result.stderr)
+        self.assertEqual(result.stdout, "")
+
+    def test_fatal_channel_stops_the_run(self):
+        new = self.repo.commit(tree(NEW))
+        self.repo.publish("master", new)
+        self.channel("nixos-unstable", new)
+        result = self.lookup("nixos-unstable", "nixos-99.99",
+                             "branch:master")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual({r[0] for r in rows(result.stdout)},
+                         {"nixos-unstable"})
 
     def test_missing_branch_fails(self):
         self.repo.publish("master", self.repo.commit(tree(NEW)))
         result = self.lookup("branch:release-99.99")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("release-99.99", result.stderr)
+        self.assertEqual(result.stdout, "")
 
     def test_help(self):
         result = run([SCRIPT, "-h"])

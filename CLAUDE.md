@@ -706,7 +706,12 @@ pointer. Pass channel names or `branch:<name>` arguments to check a
 subset. `<ids>` lists tracked ids named inside the attribute's block,
 then — prefixed `generic:` — ids named in shared code, which may still
 be gated to some branches: read the expression before trusting either.
-It fails loudly on a parse problem and warns on a stale clone.
+It fails loudly on a parse problem and warns on a stale clone. A
+channel that has moved past the clone's last fetch prints
+`unresolved` rows and the script exits 3 after the rest: record
+nothing for that channel this run, and never read it as `absent`.
+Exit 1 is a failure, possibly after some rows: record nothing from
+it.
 
 The `branch:master` and `branch:release-26.05` rows exist because a
 flake input pinned to `github:NixOS/nixpkgs/<branch>` resolves to that
