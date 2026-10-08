@@ -94,7 +94,7 @@ follow `~/src/cve-tracker-template/LIFECYCLE.md` § "Retiring a tracker".
 ├── tests/                                       # helper tests (`make check`)
 ├── systemd/                                     # user-level timer + service units
 │   ├── php-20260924-tracker-update.service      # runs scripts/auto-update
-│   └── php-20260924-tracker-update.timer        # twice daily
+│   └── php-20260924-tracker-update.timer        # daily, mornings
 ├── flake.nix, .envrc                            # Nix dev shell: hugo + go + git + resvg + curl
 ├── Makefile                                     # `make build`, `make dist`, `make banner`, `make check`
 ├── LICENSE                                      # CC BY 4.0
@@ -465,7 +465,7 @@ systemctl --user daemon-reload
 systemctl --user enable --now php-20260924-tracker-update.timer
 ```
 
-The timer fires at `06,18:05` — a slot no other tracker uses, so the
+The timer fires at `06:05` — a slot no other tracker uses, so the
 shared `~/src/nixos/nixpkgs` and `~/src/netbsd/pkgsrc` clones are not
 fetched simultaneously. Verify the live set with
 `systemctl --user list-timers | grep tracker` before changing it.

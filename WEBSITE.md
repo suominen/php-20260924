@@ -163,8 +163,8 @@ scheduled run is 2026-09-25 18:05.
   every PHP branch it ships. RHEL family, Amazon Linux, Ubuntu, Arch,
   Fedora, and Proxmox are out of scope.
 - **Automated maintenance:** a user-level systemd timer
-  (`systemd/php-20260924-tracker-update.timer`, twice daily at
-  `06,18:05` — a slot no other tracker uses) runs `scripts/auto-update`
+  (`systemd/php-20260924-tracker-update.timer`, daily at
+  `06:05` — a slot no other tracker uses) runs `scripts/auto-update`
   with `scripts/auto-update-prompt.txt`, committing onto the
   `auto-update` branch only. Merges into `main` are manual.
 
