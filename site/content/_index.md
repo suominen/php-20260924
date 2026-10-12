@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-10-07
+lastmod: 2026-10-12
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -116,7 +116,7 @@ DLA fix lands first.
 | Distribution | Release | PHP | Package | Fixed since | Status |
 |---|---|---|---|---|---|
 | Debian | sid | `8.4.26` | `php8.4` `8.4.26-1` | 2026-09-29 | :white_check_mark: Fixed |
-| Debian | forky (testing) | `8.4.24` | `php8.4` `8.4.24-1` | — | :x: Vulnerable — needs 8.4.26 |
+| Debian | forky (testing) | `8.4.26` | `php8.4` `8.4.26-1` | 2026-10-11 | :white_check_mark: Fixed |
 | Debian | 13 (trixie) | `8.4.26` | `php8.4` `8.4.26-1~deb13u1` | 2026-09-25 | :white_check_mark: Fixed |
 | Debian | 12 (bookworm) | `8.2.34` | `php8.2` `8.2.34-1~deb12u1` | 2026-10-04 | :white_check_mark: Fixed |
 | pkgsrc | `pkgsrc-current` | `8.4.26` | `php84-8.4.26` (default) | 2026-09-24 | :white_check_mark: Fixed |
@@ -173,18 +173,18 @@ security uploads to the stable suites included, so the upstream part
 of the version (everything before the last `-`) is the PHP release
 it builds.
 
-The [Debian security tracker][debian-91765] has a page per CVE; trixie
-and sid closed all ten applicable CVEs via [DSA-6514-1][dsa-6514] and
-a direct 8.4.26 upload, and bookworm closed them via
-[DLA-4819-1][dla-4819] (8.2.34). The tracker marks CVE-2026-17545 not affected ("Only
-affects PHP on Windows"). GHSA-ch8v-r6jh-4vvr has no CVE and so no
-tracker page; it reaches a suite with the upstream release or a
-changelog entry naming it.
+The [Debian security tracker][debian-91765] has a page per CVE; sid,
+forky, and trixie closed all ten applicable CVEs via a direct 8.4.26
+upload (trixie's via [DSA-6514-1][dsa-6514]), and bookworm closed them
+via [DLA-4819-1][dla-4819] (8.2.34). The tracker marks CVE-2026-17545
+not affected ("Only affects PHP on Windows"). GHSA-ch8v-r6jh-4vvr has
+no CVE and so no tracker page; it reaches a suite with the upstream
+release or a changelog entry naming it.
 
-forky gets the fix when sid's upload migrates to testing, and that
-migration is blocked: on riscv64 the new PHP fails the autopkgtest of
-another package, `php-arthurhoaro-web-thumbnailer`, which Debian counts
-as a regression. PHP's own tests pass on every architecture.
+forky took the fix once sid's upload migrated to testing; that
+migration had initially been blocked by a riscv64 autopkgtest
+regression in another package, `php-arthurhoaro-web-thumbnailer`, but
+went through once that cleared.
 
 Bookworm is in its LTS period, so its PHP updates come as DLAs from
 the LTS team, into `bookworm-security`; that archive can run ahead of
@@ -376,17 +376,20 @@ reproduced. Most readers never need it.
     snapshot.debian.org.
   - sid's fixed version is `php8.4` `8.4.26-1`, first seen
     2026-09-29 on snapshot.debian.org.
+  - forky's fixed version is `php8.4` `8.4.26-1`, migrated from
+    unstable between 2026-10-11T12:00Z and 2026-10-11T18:00Z per
+    testing's `Sources` on snapshot.debian.org.
 - **Debian security tracker** (per-CVE pages):
   - All ten applicable CVEs closed for `php8.2` in bookworm via
     [DLA-4819-1][dla-4819] (`8.2.34-1~deb12u1`), for `php8.4` in
-    trixie via [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`), and in sid
-    (`8.4.26-1`); still open for `php8.4` in forky.
+    trixie via [DSA-6514-1][dsa-6514] (`8.4.26-1~deb13u1`), and for
+    `php8.4` in sid and forky (`8.4.26-1`).
   - CVE-2026-17545 `not-affected` ("Only affects PHP on Windows").
 - **Debian testing migration** (the migration excuses on
   tracker.debian.org, and testing's `Sources` on snapshot.debian.org):
-  - `php8.4` `8.4.26-1` is blocked from testing as a regression: the
-    autopkgtest of `php-arthurhoaro-web-thumbnailer/2.1.0+dfsg-5` fails
-    on riscv64.
+  - `php8.4` `8.4.26-1` had initially been blocked from testing as a
+    regression: the autopkgtest of
+    `php-arthurhoaro-web-thumbnailer/2.1.0+dfsg-5` failed on riscv64.
   - `php8.4` `8.4.26-1`'s own autopkgtests pass on all seven release
     architectures.
 - **pkgsrc** (via `scripts/pkgsrc-versions` against the local clone):
