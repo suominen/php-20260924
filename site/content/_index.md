@@ -144,7 +144,7 @@ DLA fix lands first.
 | NixOS | `nixos-26.05-small` | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
 | NixOS | `nixos-26.05-small` | `8.2.34` | `php82` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `master` branch | `8.4.26` | `php84` (default) | 2026-09-27 | :white_check_mark: Fixed |
-| nixpkgs | `master` branch | `8.5.11` | `php85` | 2026-09-24 | :white_check_mark: Fixed |
+| nixpkgs | `master` branch | `8.5.11` | `php85` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `master` branch | `8.3.35` | `php83` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `master` branch | `8.2.34` | `php82` | 2026-09-27 | :white_check_mark: Fixed |
 | nixpkgs | `release-26.05` branch | `8.4.26` | `php84` (default) | 2026-09-27 | :white_check_mark: Fixed |
@@ -407,8 +407,11 @@ reproduced. Most readers never need it.
     `pkgs/development/interpreters/php/default.nix`; `php = php84`.
   - No tracked advisory id in `default.nix` or `generic.nix`.
   - `branch:master` and `branch:release-26.05` carry all four fixed
-    releases; php85's 8.5.11 bump landed 2026-09-24, the php84/83/82
-    bumps 2026-09-27 (commit dates on each branch).
+    releases, each merged on 2026-09-27 (per each branch's
+    first-parent history).
+  - php85's 8.5.11 bump `b3151ec8` was committed on 2026-09-24 but
+    reached `master` in merge `fd08b24f` (nixpkgs#566591) on
+    2026-09-27.
   - `nixos-unstable-small` and `nixos-26.05-small` carry all four
     fixed releases as of `nixos-26.11pre1080371.545c226a9af7` and
     `nixos-26.05.10742.a71ca2a7b9c4` respectively, both published

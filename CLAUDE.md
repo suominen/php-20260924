@@ -716,9 +716,19 @@ it.
 The `branch:master` and `branch:release-26.05` rows exist because a
 flake input pinned to `github:NixOS/nixpkgs/<branch>` resolves to that
 branch; an input following a *channel* name is answered by that
-channel's rows. **A branch row's *Fixed since* is the commit date of
-the version bump**, not a channel release date. The branch dates also
-bound the channel dates.
+channel's rows. **A branch row's *Fixed since* is the date the bump
+landed on that branch**, not a channel release date, and not the bump
+commit's own date: a PR or staging merge can land days later (php85's
+8.5.11 bump was committed 2026-09-24 and merged into `master`
+2026-09-27). Read the branch's first-parent history; its entry for the
+bump is the merge that brought it in, or the commit if pushed
+directly:
+
+```sh
+git -C ~/src/nixos/nixpkgs log --first-parent --format='%h %cd %s' --date=short origin/master -- pkgs/development/interpreters/php/
+```
+
+The branch dates also bound the channel dates.
 
 Verdict: `<php>` at or past the branch's fixed release is fixed; a
 patch named after the ids on an older base needs every applicable

@@ -120,10 +120,13 @@ leave behind is the edited tracker (and its commit).
       be cut short, so record nothing for NixOS or nixpkgs this run
       and say why the same way.
 
-      A branch row's (master, release-26.05) "Fixed since" is the
-      COMMIT DATE of the version bump:
+      A branch row's (master, release-26.05) "Fixed since" is the date
+      the bump LANDED on that branch — not the bump commit's own date,
+      which can be days earlier. The branch's first-parent history
+      lists the merge that brought it in (or the commit, if pushed
+      directly):
 
-        git -C ~/src/nixos/nixpkgs log -1 --format=%cd --date=short <commit>
+        git -C ~/src/nixos/nixpkgs log --first-parent --format='%h %cd %s' --date=short origin/master -- pkgs/development/interpreters/php/
 
       When a channel row flips to fixed, DERIVE its "Fixed since" — do
       not use today's date, and do not reuse another channel's date.
