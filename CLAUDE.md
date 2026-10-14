@@ -49,23 +49,21 @@ unchanged (see below).
 
 ## Your task
 
-Keep `site/content/_index.md` (the canonical tracker) up to date as
-fixes land in the tracked distros.
+This tracker was archived on 2026-10-14 — it is no longer updated.
+Every tracked Debian suite (sid, forky, trixie via DSA-6514-1, bookworm
+via DLA-4819-1), every NixOS channel and nixpkgs branch, and
+`pkgsrc-current` ships every branch's fixed release.  The four
+`pkgsrc-2026Q3` rows stay `:x:`: no pullups were requested, and none
+was expected three weeks after the `pkgsrc-current` commits.  The
+auto-update (timer, unit symlinks, worktree, `auto-update` branch) has
+been torn down; do not resume routine updates.  If a genuinely new fact
+surfaces (e.g. a KEV listing), edit `site/content/_index.md`, rebuild
+with `make build`, and publish with `make dist` — publishing is
+externally visible, so ask first — but the default state is frozen.
 
-**In an interactive session**, rebuild with `make build` and publish
-with `make dist` — publishing is externally visible, so ask first.
-**In the scheduled headless run**, do neither: edit and commit onto the
-`auto-update` branch and stop. `make` is deliberately absent from that
-run's allowlist, and the publish happens later, from a human-reviewed
-merge.
-
-A scheduled background agent runs against this repo to refresh the
-tracker on its own. If you find the file has been edited since you
-last looked, that's likely why — re-read before assuming stale state.
-
-To retire (archive) this tracker — when every tracked row has shipped
-a fix, or the releases are otherwise no longer worth active tracking —
-follow `~/src/cve-tracker-template/LIFECYCLE.md` § "Retiring a tracker".
+The retirement followed `~/src/cve-tracker-template/LIFECYCLE.md`
+§ "Retiring a tracker" — the playbook for retiring (archiving) any of
+these trackers.
 
 ## Repo layout
 

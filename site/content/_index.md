@@ -3,12 +3,18 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-10-12
+lastmod: 2026-10-14
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
   hiddenInSingle: true
 ---
+
+*This tracker is no longer updated.  Every tracked Debian suite, NixOS
+channel, and nixpkgs branch ships the fixes, as does `pkgsrc-current`;
+the `pkgsrc-2026Q3` quarterly branch never received them by pullup, so
+pkgsrc hosts get them from `pkgsrc-current` or the next quarterly
+branch.*
 
 ## Summary
 
@@ -200,8 +206,9 @@ branch a PHP-dependent package builds against unless the host
 overrides it — 8.4 on both tracked branches.
 
 `pkgsrc-2026Q3`, the quarterly branch most pkgsrc hosts run, was cut
-on 2026-09-21 — before the releases — and receives them by pullup
-from `pkgsrc-current`.
+on 2026-09-21 — before the releases — and never received them by
+pullup from `pkgsrc-current`. The next quarterly branch, cut from
+`pkgsrc-current`, will carry them.
 
 The identifier carries an `nbN` suffix when the package's
 `PKGREVISION` is set. That revision bumps for many reasons besides
