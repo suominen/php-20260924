@@ -51,10 +51,10 @@ unchanged (see below).
 
 This tracker was archived on 2026-10-14 — it is no longer updated.
 Every tracked Debian suite (sid, forky, trixie via DSA-6514-1, bookworm
-via DLA-4819-1), every NixOS channel and nixpkgs branch, and
-`pkgsrc-current` ships every branch's fixed release.  The four
-`pkgsrc-2026Q3` rows stay `:x:`: no pullups were requested, and none
-was expected three weeks after the `pkgsrc-current` commits.  The
+via DLA-4819-1), every NixOS channel and nixpkgs branch,
+`pkgsrc-current`, and `pkgsrc-2026Q3` ships every branch's fixed
+release.  The Q3 rows flipped after archiving, by pullups #7277/#7278
+(2026-10-20) and #7294/#7295 (2026-10-21).  The
 auto-update (timer, unit symlinks, worktree, `auto-update` branch) has
 been torn down; do not resume routine updates.  If a genuinely new fact
 surfaces (e.g. a KEV listing), edit `site/content/_index.md`, rebuild

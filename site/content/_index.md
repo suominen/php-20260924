@@ -3,7 +3,7 @@ title: "PHP 2026-09-24 security releases — 11 CVEs across 8.2–8.5"
 description: "PHP 8.5.11, 8.4.26, 8.3.35, and 8.2.34 security releases (11 CVEs, 12 GitHub advisories: SOAP, FPM, OpenSSL, HTTP stream wrapper, Phar, mysqlnd) — Debian, pkgsrc, and NixOS patch status tracker"
 layout: "single"
 date: 2026-09-25
-lastmod: 2026-10-14
+lastmod: 2026-10-21
 cover:
   image: "php-20260924-tracker.png"
   alt: "PHP 2026-09-24 security releases — patch status tracker"
@@ -11,10 +11,7 @@ cover:
 ---
 
 *This tracker is no longer updated.  Every tracked Debian suite, NixOS
-channel, and nixpkgs branch ships the fixes, as does `pkgsrc-current`;
-the `pkgsrc-2026Q3` quarterly branch never received them by pullup, so
-pkgsrc hosts get them from `pkgsrc-current` or the next quarterly
-branch.*
+channel, nixpkgs branch, and pkgsrc branch ships the fixes.*
 
 ## Summary
 
@@ -129,10 +126,10 @@ DLA fix lands first.
 | pkgsrc | `pkgsrc-current` | `8.5.11` | `php85-8.5.11` | 2026-09-24 | :white_check_mark: Fixed |
 | pkgsrc | `pkgsrc-current` | `8.3.35` | `php83-8.3.35` | 2026-09-24 | :white_check_mark: Fixed |
 | pkgsrc | `pkgsrc-current` | `8.2.34` | `php82-8.2.34` | 2026-09-24 | :white_check_mark: Fixed |
-| pkgsrc | `pkgsrc-2026Q3` | `8.4.25` | `php84-8.4.25nb1` (default) | — | :x: Vulnerable — needs 8.4.26 |
-| pkgsrc | `pkgsrc-2026Q3` | `8.5.10` | `php85-8.5.10nb1` | — | :x: Vulnerable — needs 8.5.11 |
-| pkgsrc | `pkgsrc-2026Q3` | `8.3.33` | `php83-8.3.33nb1` | — | :x: Vulnerable — needs 8.3.35 |
-| pkgsrc | `pkgsrc-2026Q3` | `8.2.33` | `php82-8.2.33nb1` | — | :x: Vulnerable — needs 8.2.34 |
+| pkgsrc | `pkgsrc-2026Q3` | `8.4.26` | `php84-8.4.26` (default) | 2026-10-21 | :white_check_mark: Fixed |
+| pkgsrc | `pkgsrc-2026Q3` | `8.5.11` | `php85-8.5.11` | 2026-10-21 | :white_check_mark: Fixed |
+| pkgsrc | `pkgsrc-2026Q3` | `8.3.35` | `php83-8.3.35` | 2026-10-20 | :white_check_mark: Fixed |
+| pkgsrc | `pkgsrc-2026Q3` | `8.2.34` | `php82-8.2.34` | 2026-10-20 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable` | `8.4.26` | `php84` (default) | 2026-09-28 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable` | `8.5.11` | `php85` | 2026-09-28 | :white_check_mark: Fixed |
 | NixOS | `nixos-unstable` | `8.3.35` | `php83` | 2026-09-28 | :white_check_mark: Fixed |
@@ -206,15 +203,13 @@ branch a PHP-dependent package builds against unless the host
 overrides it — 8.4 on both tracked branches.
 
 `pkgsrc-2026Q3`, the quarterly branch most pkgsrc hosts run, was cut
-on 2026-09-21 — before the releases — and never received them by
-pullup from `pkgsrc-current`. The next quarterly branch, cut from
-`pkgsrc-current`, will carry them.
+on 2026-09-21 — before the releases — and received them by pullup from
+`pkgsrc-current` almost four weeks later.
 
 The identifier carries an `nbN` suffix when the package's
 `PKGREVISION` is set. That revision bumps for many reasons besides
-security patches — the `nb1` on the 2026Q3 packages comes from a
-rebuild for a new PCRE2 — so an `nbN` suffix on its own says nothing
-about these fixes.
+security patches, so an `nbN` suffix on its own says nothing about
+these fixes.
 
 ### NixOS
 
@@ -404,8 +399,10 @@ reproduced. Most readers never need it.
     on both branches.
   - `origin/trunk`: the four releases landed 2026-09-24, one commit
     per PHP branch.
-  - `origin/pkgsrc-2026Q3`: branch point 2026-09-21; the `nb1`
-    revisions come from the 2026-09-02 recursive bump for PCRE2 10.48.
+  - `origin/pkgsrc-2026Q3`: branch point 2026-09-21.
+  - `origin/pkgsrc-2026Q3`: pullup tickets #7277 (`lang/php83`) and
+    #7278 (`lang/php82`) landed 2026-10-20; #7294 (`lang/php84`) and
+    #7295 (`lang/php85`) landed 2026-10-21. Each reset `PKGREVISION`.
   - No tracked advisory id in any `patches/` directory on either
     branch.
 - **NixOS / nixpkgs** (via `scripts/nixpkgs-versions` against the
